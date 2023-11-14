@@ -1,0 +1,39 @@
+package src.domain.stmt;
+
+import src.domain.exception.MyException;
+import src.domain.exp.Exp;
+import src.domain.prgstate.MyIStack;
+import src.domain.prgstate.PrgState;
+import src.domain.type.BoolType;
+import src.domain.value.Value;
+
+public class WhileStmt implements IStmt{
+
+    Exp exp;
+    IStmt stmt;
+
+    public WhileStmt(Exp exp, IStmt stmt){
+        this.exp = exp;
+        this.stmt = stmt;
+    }
+
+    @Override
+    public PrgState execute(PrgState state) throws MyException {
+        MyIStack<IStmt> stk = state.getStack();
+        stk.pop();
+        Value val = exp.eval(state.getSymTable());
+        if(!val.getType().equals(new BoolType())){
+            throw new MyException("Conditional expression is not a boolean");
+        }
+        if(val.getVal().equals(true)){
+            stk.push(this);
+            stk.push(stmt);
+        }
+        return state;
+    }
+
+    @Override
+    public String toString(){
+        return "while(" + exp.toString() + ")";
+    }
+}
