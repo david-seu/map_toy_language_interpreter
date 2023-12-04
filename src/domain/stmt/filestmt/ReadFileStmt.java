@@ -31,13 +31,12 @@ public class ReadFileStmt implements IStmt {
     }
     @Override
     public PrgState execute(PrgState state) throws MyException {
-        MyIStack<IStmt> stk = state.getStack();
         MyIDictionary<String, Value> symTbl = state.getSymTable();
+        MyIDictionary<Integer, Value> heap = state.getHeap();
         MyIDictionary<StringValue,BufferedReader> fileTbl = state.getFileTable();
-        stk.pop();
         if(!(symTbl.isDefined(var_name) && symTbl.lookup(var_name).getType().equals(new IntType())))
             throw new MyException("Variable is not defined or types do not match");
-        Value expVal = exp.eval(symTbl);
+        Value expVal = exp.eval(symTbl, heap);
         StringValue val = new StringValue((String)expVal.getVal());
         if(!expVal.getType().equals(new StringType()))
             throw new MyException("Expression is not a string");

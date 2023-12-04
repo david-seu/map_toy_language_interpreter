@@ -20,8 +20,7 @@ public class WhileStmt implements IStmt{
     @Override
     public PrgState execute(PrgState state) throws MyException {
         MyIStack<IStmt> stk = state.getStack();
-        stk.pop();
-        Value val = exp.eval(state.getSymTable());
+        Value val = exp.eval(state.getSymTable(), state.getHeap());
         if(!val.getType().equals(new BoolType())){
             throw new MyException("Conditional expression is not a boolean");
         }
@@ -34,6 +33,6 @@ public class WhileStmt implements IStmt{
 
     @Override
     public String toString(){
-        return "while(" + exp.toString() + ")";
+        return "(while(" + exp.toString() + ") " + stmt.toString() + ")";
     }
 }

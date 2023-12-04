@@ -26,11 +26,10 @@ public class CloseRFileStmt implements IStmt {
     }
     @Override
     public PrgState execute(PrgState state) throws MyException {
-        MyIStack<IStmt> stk = state.getStack();
         MyIDictionary<String, Value> symTbl = state.getSymTable();
+        MyIDictionary<Integer, Value> heap = state.getHeap();
         MyIDictionary<StringValue, BufferedReader> fileTbl = state.getFileTable();
-        stk.pop();
-        Value expVal = exp.eval(symTbl);
+        Value expVal = exp.eval(symTbl, heap);
         StringValue val = new StringValue((String) expVal.getVal());
         if(!expVal.getType().equals(new StringType()))
             throw new MyException("Expression is not a string");

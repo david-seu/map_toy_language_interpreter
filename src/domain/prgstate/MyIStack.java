@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public interface MyIStack<T> {
-    void pop() throws EmptyStackException;
+    T pop() throws EmptyStackException;
     void push(T v);
 
     T top() throws EmptyStackException;

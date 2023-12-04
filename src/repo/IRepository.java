@@ -3,8 +3,11 @@ package src.repo;
 import src.domain.exception.MyException;
 import src.domain.prgstate.PrgState;
 
-public interface IRepository {
-    PrgState getCrtPrg(Integer programIndex);
+import java.util.Vector;
 
-    void logPrgStateExec(Integer programIndex) throws MyException;
+public interface IRepository {
+    Vector<PrgState> getPrgList();
+    Vector<PrgState> setPrgList(Vector<PrgState> prgList);
+    void logPrgStateExec(PrgState prgState) throws MyException;
+    String getLogFilePath();
 }

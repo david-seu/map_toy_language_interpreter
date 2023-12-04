@@ -10,7 +10,6 @@ public class NoPStmt implements IStmt {
 
     @Override
     public PrgState execute(PrgState state) throws EmptyStackException {
-        state.getStack().pop();
         return state;
     }
 }

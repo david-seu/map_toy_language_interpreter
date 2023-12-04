@@ -12,9 +12,9 @@ public class MyStack<T> implements MyIStack<T> {
     }
 
     @Override
-    public void pop() throws EmptyStackException {
+    public T pop() throws EmptyStackException {
         try{
-            stack.pop();
+            return stack.pop();
         }
         catch (Exception ignored){
             throw new EmptyStackException();

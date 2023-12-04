@@ -1,12 +1,16 @@
-package src.utils;
+package src.domain.prgstate;
 
 import src.domain.exception.EmptyStackException;
-import src.domain.prgstate.MyIStack;
-import src.domain.prgstate.MyStack;
+import src.domain.value.Value;
 
-public class AddressBuilder {
+public class MyHeap extends MyDictionary<Integer, Value>{
+
     private Integer address = 1;
     private static final MyIStack<Integer> freeAddress = new MyStack<>();
+
+    public MyHeap(){
+        super();
+    }
 
     public Integer getFreeAddress() throws EmptyStackException {
         if(freeAddress.isEmpty())

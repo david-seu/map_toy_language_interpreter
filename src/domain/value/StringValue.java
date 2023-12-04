@@ -30,4 +30,9 @@ public class StringValue implements Value{
     public String toString() {
         return val;
     }
+
+    @Override
+    public Value deepCopy() {
+        return new StringValue(val);
+    }
 }

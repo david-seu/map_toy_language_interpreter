@@ -4,17 +4,25 @@ import src.domain.exception.MyException;
 import src.domain.type.Type;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface MyIDictionary<T,V> {
-    V lookup(T id);
+public interface MyIDictionary<K,V> {
+    V lookup(K id);
 
-    Boolean isDefined(T id);
-    void update(T id, V val) throws MyException;
-    void add(T id, Type type) throws MyException;
+    Boolean isDefined(K id);
+    void update(K id, V val) throws MyException;
+    void add(K id, Type type) throws MyException;
 
-    void add(T id, V val) throws MyException;
+    void add(K id, V val) throws MyException;
 
-    ArrayList<T> getKeys();
+    void setContent(Map<K, V> newContent);
 
-    void remove(T key);
+    ArrayList<K> getKeys();
+
+    void remove(K key);
+
+    Map<K, V> getContent();
+
 }

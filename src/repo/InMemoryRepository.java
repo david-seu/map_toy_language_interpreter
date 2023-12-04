@@ -19,7 +19,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 public class InMemoryRepository implements IRepository{
-    private final Vector<PrgState> prgList;
+    private Vector<PrgState> prgList;
     private final String logFilePath;
 
     public InMemoryRepository(Vector<PrgState> prgList, String logFilePath) {
@@ -33,16 +33,27 @@ public class InMemoryRepository implements IRepository{
         this.logFilePath = logFilePath;
     }
 
+
     @Override
-    public PrgState getCrtPrg(Integer programIndex) {
-        return prgList.get(programIndex);
+    public Vector<PrgState> getPrgList(){
+        return prgList;
     }
 
-    public void logPrgStateExec(Integer programIndex) throws MyException {
+    @Override
+    public Vector<PrgState> setPrgList(Vector<PrgState> prgList){
+        return this.prgList = prgList;
+    }
+
+    public void logPrgStateExec(PrgState prg) throws MyException {
         try {
             PrintWriter logFile = new PrintWriter(new FileWriter(logFilePath, true));
-            PrgState prg = prgList.get(programIndex);
-            logFile.println("ExeStack:");
+            logFile.println("Id=" + prg.getId());
+            logFile.println("SymTable_" + prg.getId() + ":");
+            MyIDictionary<String, Value> symTbl = prg.getSymTable();
+            for(String key : symTbl.getKeys()) {
+                logFile.println(key + "-->" + symTbl.lookup(key));
+            }
+            logFile.println("ExeStack_" + prg.getId() + ":");
             Stack<IStmt> stk = prg.getStack().getStack();
             while(!stk.isEmpty()) {
                 IStmt s = stk.pop();
@@ -52,25 +63,19 @@ public class InMemoryRepository implements IRepository{
                     logFile.println(s.toString());
             }
             logFile.println("------------------------------------------------------------");
-            logFile.println("SymTable:");
-            MyIDictionary<String, Value> symTbl = prg.getSymTable();
-            for(String key : symTbl.getKeys()) {
-                logFile.println(key + "-->" + symTbl.lookup(key));
-            }
-            logFile.println("------------------------------------------------------------");
-            logFile.println("Out:");
+            logFile.println("Out_" + prg.getId() + ":");
             MyIList<Value> out = prg.getOut();
             for(Value v : out.getValues()) {
                 logFile.println(v);
             }
             logFile.println("------------------------------------------------------------");
-            logFile.println("FileTable:");
+            logFile.println("FileTable_" + prg.getId() + ":");
             MyIDictionary<StringValue, BufferedReader> fileTable = prg.getFileTable();
             for(StringValue key : fileTable.getKeys()) {
                 logFile.println(key);
             }
             logFile.println("------------------------------------------------------------");
-            logFile.println("Heap:");
+            logFile.println("Heap_" + prg.getId() + ":");
             MyIDictionary<Integer,Value> heap = prg.getHeap();
             for(Integer key : heap.getKeys()) {
                 logFile.println(key + "-->" + heap.lookup(key));
@@ -82,5 +87,10 @@ public class InMemoryRepository implements IRepository{
         catch (Exception e) {
             throw new MyException(e.getMessage());
         }
+    }
+
+    @Override
+    public String getLogFilePath(){
+        return this.logFilePath;
     }
 }

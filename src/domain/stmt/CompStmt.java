@@ -16,15 +16,14 @@ public class CompStmt implements IStmt {
     @Override
     public PrgState execute(PrgState state) throws MyException {
         MyIStack<IStmt> stk = state.getStack();
-        stk.pop();
         stk.push(second);
         stk.push(first);
-        return null;
+        return state;
     }
 
     @Override
     public String toString() {
-        return "(" + first.toString() + "; " + second.toString() + ")";
+        return first.toString() + "; " + second.toString();
     }
 
     public IStmt getSecond() {

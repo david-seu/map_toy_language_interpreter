@@ -5,18 +5,19 @@ import src.domain.type.Type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-public class MyDictionary<T,V> implements MyIDictionary<T,V>{
+public class MyDictionary<K,V> implements MyIDictionary<K,V> {
 
-    private final HashMap<T,V> dict = new HashMap<>();
+    private final HashMap<K,V> dict = new HashMap<>();
 
     public MyDictionary() {
 
     }
 
     @Override
-    public V lookup(T id) {
-        for(T key:dict.keySet()){
+    public V lookup(K id) {
+        for(K key:dict.keySet()){
             if(key.equals(id))
                 return dict.get(key);
         }
@@ -24,8 +25,8 @@ public class MyDictionary<T,V> implements MyIDictionary<T,V>{
     }
 
     @Override
-    public Boolean isDefined(T id) {
-        for(T key:dict.keySet()){
+    public Boolean isDefined(K id) {
+        for(K key:dict.keySet()){
             if(key.equals(id))
                 return true;
         }
@@ -33,12 +34,12 @@ public class MyDictionary<T,V> implements MyIDictionary<T,V>{
     }
 
     @Override
-    public void update(T id, V val) throws MyException {
+    public void update(K id, V val) {
         dict.put(id,val);
     }
 
     @Override
-    public void add(T id, Type type) throws MyException {
+    public void add(K id, Type type) throws MyException {
         if(dict.get(id) == null)
             if(type != null)
             {
@@ -49,8 +50,8 @@ public class MyDictionary<T,V> implements MyIDictionary<T,V>{
     }
 
     @Override
-    public void add(T id, V val) throws MyException {
-        for(T key:dict.keySet()){
+    public void add(K id, V val) throws MyException {
+        for(K key:dict.keySet()){
             if(key.equals(id))
                 throw new MyException("Variable " + id + " already declared");
         }
@@ -58,15 +59,24 @@ public class MyDictionary<T,V> implements MyIDictionary<T,V>{
     }
 
     @Override
-    public void remove(T id) {
-        for(T key:dict.keySet()){
+    public void remove(K id) {
+        for(K key:dict.keySet()){
             if(key.equals(id))
                 dict.remove(key);
         }
     }
 
-    public ArrayList<T> getKeys() {
+    public ArrayList<K> getKeys() {
         return new ArrayList<>(dict.keySet());
+    }
+
+    public void setContent(Map<K,V> newDict){
+        dict.clear();
+        dict.putAll(newDict);
+    }
+
+    public Map<K, V> getContent() {
+        return (Map<K, V>) dict.clone();
     }
 
     @Override

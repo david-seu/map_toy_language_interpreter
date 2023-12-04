@@ -15,7 +15,7 @@ public class ValueExp implements Exp{
     }
 
     @Override
-    public Value eval(MyIDictionary<String, Value> tbl) throws MyException {
+    public Value eval(MyIDictionary<String, Value> symTbl, MyIDictionary<Integer, Value> heap) throws MyException {
         return e;
     }
 }

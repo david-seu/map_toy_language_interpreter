@@ -22,7 +22,6 @@ public class VarDeclStmt implements IStmt {
 
     @Override
     public PrgState execute(PrgState state) throws MyException {
-        state.getStack().pop();
         MyIDictionary<String, Value> symTable = state.getSymTable();
         if(symTable.lookup(name) != null) {
             throw new MyException("Variable " + name + " already declared");

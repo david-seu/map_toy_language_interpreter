@@ -1,11 +1,12 @@
 package src.domain.prgstate;
 
+import src.domain.exception.MyException;
 import src.domain.stmt.IStmt;
 import src.domain.value.StringValue;
 import src.domain.value.Value;
-import src.utils.AddressBuilder;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 
 public class PrgState {
     private final MyIStack<IStmt> stk;
@@ -14,17 +15,19 @@ public class PrgState {
     private final MyIDictionary<StringValue, BufferedReader> fileTable;
     private final MyIDictionary<Integer,Value> heap;
 
-    private final AddressBuilder addressBuilder;
+    private final Integer id;
+
+    private static Integer nrPrgStates = 0;
     private IStmt originalProgram; //optional field, but good to have
 
-    public PrgState(MyIStack<IStmt> stk, MyIDictionary<String, Value> symTable, MyIList<Value> out, MyIDictionary<StringValue,BufferedReader> fileTable, MyIDictionary<Integer,Value> heap, AddressBuilder addressBuilder, IStmt prg){
+    public PrgState(MyIStack<IStmt> stk, MyIDictionary<String, Value> symTable, MyIList<Value> out, MyIDictionary<StringValue,BufferedReader> fileTable, MyIDictionary<Integer,Value> heap, IStmt prg){
         this.stk = stk;
         this.symTable = symTable;
         this.out = out;
         this.fileTable = fileTable;
         this.heap = heap;
-        this.addressBuilder = addressBuilder;
         this.originalProgram = prg;
+        this.id = nrPrgStates++;
         stk.push(prg);
     }
 
@@ -48,10 +51,6 @@ public class PrgState {
         return this.heap;
     }
 
-    public AddressBuilder getAddressBuilder(){
-        return this.addressBuilder;
-    }
-
     public IStmt getOriginalProgram() {
         return originalProgram;
     }
@@ -60,8 +59,24 @@ public class PrgState {
         this.originalProgram = originalProgram;
     }
 
+
+    public boolean isNotCompleted(){
+        return !stk.isEmpty();
+    }
+
+    public PrgState oneStep() throws MyException, IOException, ClassNotFoundException {
+        if(stk.isEmpty()){
+            throw new MyException("Program state stack is empty");
+        }
+        IStmt crtStmt = stk.pop();
+        return crtStmt.execute(this);
+    }
     @Override
     public String toString() {
-        return "ExeStack:\n" + stk.toString() + "\nSymTable:\n" + symTable.toString() + "\nOut:\n" + out.toString() + "\nFileTable:\n" + fileTable.toString() + "\nHeap:\n" + heap.toString() + "\n";
+        return "Id: " + id + "\nExeStack:\n" + stk.toString() + "\nSymTable:\n" + symTable.toString() + "\nOut:\n" + out.toString() + "\nFileTable:\n" + fileTable.toString() + "\nHeap:\n" + heap.toString() + "\n";
+    }
+
+    public Integer getId() {
+        return id;
     }
 }
