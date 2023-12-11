@@ -6,7 +6,6 @@ import src.domain.value.StringValue;
 import src.domain.value.Value;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 
 public class PrgState {
     private final MyIStack<IStmt> stk;
@@ -27,8 +26,13 @@ public class PrgState {
         this.fileTable = fileTable;
         this.heap = heap;
         this.originalProgram = prg;
-        this.id = nrPrgStates++;
+        this.id = getNewId();
         stk.push(prg);
+    }
+
+    private synchronized Integer getNewId(){
+        nrPrgStates++;
+        return nrPrgStates;
     }
 
     public MyIStack<IStmt> getStack() {
@@ -64,7 +68,7 @@ public class PrgState {
         return !stk.isEmpty();
     }
 
-    public PrgState oneStep() throws MyException, IOException, ClassNotFoundException {
+    public PrgState oneStep() throws MyException {
         if(stk.isEmpty()){
             throw new MyException("Program state stack is empty");
         }

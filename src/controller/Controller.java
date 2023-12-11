@@ -2,6 +2,7 @@ package src.controller;
 
 import src.domain.exception.MyException;
 import src.domain.prgstate.*;
+import src.domain.stmt.CompStmt;
 import src.domain.value.RefValue;
 import src.domain.value.Value;
 import src.repo.IRepository;
@@ -26,10 +27,16 @@ public class Controller {
     }
 
 
-    public void oneStepForAllPrg(Vector<PrgState> prgList) throws InterruptedException {
+    public void oneStepForAllPrg(Vector<PrgState> prgList) throws InterruptedException, MyException {
+
+        for (PrgState prg : prgList) {
+                repo.logPrgStateExec(prg);
+        }
+
+        repo.logAllPrgStateExec();
 
         Vector<Callable<PrgState>> callList = prgList.stream()
-                .map((PrgState p) -> (Callable<PrgState>)(p::oneStep))
+                .map((PrgState p) -> (Callable<PrgState>)(() -> {return p.oneStep();}))
                 .collect(Collectors.toCollection(Vector::new));
 
         Vector<PrgState> newPrgList = executor.invokeAll(callList).stream()
@@ -41,37 +48,27 @@ public class Controller {
                     }
                     return null;
                 })
-                .filter(Objects::nonNull)
+                .filter(p -> p != null)
                 .collect(Collectors.toCollection(Vector::new));
 
-        prgList.forEach(prg -> prg.getHeap().setContent(safeGarbageCollector(
-                getAddrFromSymTable(prg.getSymTable().getContent().values()),
-                prg.getHeap().getContent())));
+        prgList.addAll(newPrgList);
 
-        prgList.forEach(prg -> {
-            try {
+        for (PrgState prg : prgList) {
                 repo.logPrgStateExec(prg);
-            } catch (MyException e) {
-                System.out.println(e.getMessage());
-            }
-        });
+        }
+        repo.logAllPrgStateExec();
 
-        repo.setPrgList(newPrgList);
+        repo.setPrgList(prgList);
 
     }
     public void allStep() throws MyException, InterruptedException, IOException {
         executor = Executors.newFixedThreadPool(2);
         Vector<PrgState> prgList = removeCompletedPrg(repo.getPrgList());
 
-        prgList.forEach(prg -> {
-            try {
-                repo.logPrgStateExec(prg);
-            } catch (MyException e) {
-                System.out.println(e.getMessage());
-            }
-        });
-
         while(!prgList.isEmpty()){
+            prgList.forEach(prg -> prg.getHeap().setContent(safeGarbageCollector(
+                    getAddrFromSymTable(prg.getSymTable().getContent().values()),
+                    prg.getHeap().getContent())));
             oneStepForAllPrg(prgList);
             prgList = removeCompletedPrg(repo.getPrgList());
         }

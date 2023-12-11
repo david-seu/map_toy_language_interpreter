@@ -44,6 +44,6 @@ public class OpenRFileStmt implements IStmt {
         catch (Exception e){
             throw new MyException(e.toString());
         }
-        return state;
+        return null;
     }
 }

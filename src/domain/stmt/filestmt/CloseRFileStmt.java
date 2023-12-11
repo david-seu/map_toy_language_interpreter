@@ -44,6 +44,6 @@ public class CloseRFileStmt implements IStmt {
             throw new MyException(e.toString());
         }
 
-        return state;
+        return null;
     }
 }

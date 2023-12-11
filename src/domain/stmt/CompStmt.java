@@ -8,6 +8,12 @@ public class CompStmt implements IStmt {
     private final IStmt first;
     private final IStmt second;
 
+
+    public CompStmt(){
+        second = null;
+        first = null;
+    };
+
     public CompStmt(IStmt first, IStmt second) {
         this.first = first;
         this.second = second;
@@ -18,7 +24,7 @@ public class CompStmt implements IStmt {
         MyIStack<IStmt> stk = state.getStack();
         stk.push(second);
         stk.push(first);
-        return state;
+        return null;
     }
 
     @Override
@@ -33,4 +39,6 @@ public class CompStmt implements IStmt {
     public IStmt getFirst() {
         return first;
     }
+
+
 }

@@ -53,6 +53,7 @@ public class InMemoryRepository implements IRepository{
             for(String key : symTbl.getKeys()) {
                 logFile.println(key + "-->" + symTbl.lookup(key));
             }
+            logFile.println("------------------------------------------------------------");
             logFile.println("ExeStack_" + prg.getId() + ":");
             Stack<IStmt> stk = prg.getStack().getStack();
             while(!stk.isEmpty()) {
@@ -63,22 +64,33 @@ public class InMemoryRepository implements IRepository{
                     logFile.println(s.toString());
             }
             logFile.println("------------------------------------------------------------");
-            logFile.println("Out_" + prg.getId() + ":");
-            MyIList<Value> out = prg.getOut();
-            for(Value v : out.getValues()) {
-                logFile.println(v);
+            logFile.flush();
+            logFile.close();
+        }
+        catch (Exception e) {
+            throw new MyException(e.getMessage());
+        }
+    }
+
+    public void logAllPrgStateExec() throws MyException{
+        try{
+            PrintWriter logFile = new PrintWriter(new FileWriter(logFilePath, true));
+            logFile.println("Heap");
+            MyIDictionary<Integer,Value> heap = prgList.get(0).getHeap();
+            for(Integer key : heap.getKeys()) {
+                logFile.println(key + "-->" + heap.lookup(key));
             }
             logFile.println("------------------------------------------------------------");
-            logFile.println("FileTable_" + prg.getId() + ":");
-            MyIDictionary<StringValue, BufferedReader> fileTable = prg.getFileTable();
+            logFile.println("FileTable");
+            MyIDictionary<StringValue, BufferedReader> fileTable = prgList.get(0).getFileTable();
             for(StringValue key : fileTable.getKeys()) {
                 logFile.println(key);
             }
             logFile.println("------------------------------------------------------------");
-            logFile.println("Heap_" + prg.getId() + ":");
-            MyIDictionary<Integer,Value> heap = prg.getHeap();
-            for(Integer key : heap.getKeys()) {
-                logFile.println(key + "-->" + heap.lookup(key));
+            logFile.println("Out");
+            MyIList<Value> out = prgList.get(0).getOut();
+            for(Value v : out.getValues()) {
+                logFile.println(v);
             }
             logFile.println("------------------------------------------------------------");
             logFile.flush();

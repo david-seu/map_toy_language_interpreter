@@ -30,7 +30,7 @@ public class VarDeclStmt implements IStmt {
         {
                 symTable.add(name, type);
         }
-        return state;
+        return null;
     }
 
 }

@@ -28,7 +28,7 @@ public class WhileStmt implements IStmt{
             stk.push(this);
             stk.push(stmt);
         }
-        return state;
+        return null;
     }
 
     @Override

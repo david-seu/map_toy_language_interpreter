@@ -25,7 +25,6 @@ public class AssignStmt implements IStmt {
 
     @Override
     public PrgState execute(PrgState state) throws MyException {
-        MyIStack<IStmt> stk = state.getStack();
         MyIDictionary<String, Value> symTbl = state.getSymTable();
         MyIDictionary<Integer, Value> heap = state.getHeap();
         if(symTbl.isDefined(id)){
@@ -41,6 +40,6 @@ public class AssignStmt implements IStmt {
         else{
             throw new VariableNotDefinedException(id);
         }
-        return state;
+        return null;
     }
 }

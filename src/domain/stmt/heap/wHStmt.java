@@ -38,7 +38,7 @@ public class wHStmt implements IStmt{
             throw new MyException("Types do not match");
         }
         heap.update((Integer) val.getVal(), expVal);
-        return state;
+        return null;
     }
 
     @Override

@@ -10,6 +10,6 @@ public class NoPStmt implements IStmt {
 
     @Override
     public PrgState execute(PrgState state) throws EmptyStackException {
-        return state;
+        return null;
     }
 }

@@ -37,7 +37,7 @@ public class NewStmt implements IStmt {
         RefValue refVal = new RefValue(address, expVal.getType());
         heap.add(address, expVal);
         symTbl.update(var_name, refVal);
-        return state;
+        return null;
     }
 
     @Override
