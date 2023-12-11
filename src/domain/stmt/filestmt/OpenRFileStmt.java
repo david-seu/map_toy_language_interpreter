@@ -46,4 +46,15 @@ public class OpenRFileStmt implements IStmt {
         }
         return null;
     }
+
+    @Override
+    public MyIDictionary<String, src.domain.type.Type> typeCheck(MyIDictionary<String, src.domain.type.Type> typeEnv) throws MyException {
+        src.domain.type.Type typeExp = exp.typeCheck(typeEnv);
+        if(typeExp.equals(new StringType())){
+            return typeEnv;
+        }
+        else{
+            throw new MyException("OpenRFile statement: expression is not a string");
+        }
+    }
 }

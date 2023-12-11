@@ -2,6 +2,7 @@ package src.domain.exp;
 
 import src.domain.exception.MyException;
 import src.domain.prgstate.MyIDictionary;
+import src.domain.type.Type;
 import src.domain.value.Value;
 
 public class ValueExp implements Exp{
@@ -17,5 +18,10 @@ public class ValueExp implements Exp{
     @Override
     public Value eval(MyIDictionary<String, Value> symTbl, MyIDictionary<Integer, Value> heap) throws MyException {
         return e;
+    }
+
+    @Override
+    public Type typeCheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        return e.getType();
     }
 }

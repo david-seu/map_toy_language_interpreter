@@ -73,7 +73,7 @@ public class Controller {
             prgList = removeCompletedPrg(repo.getPrgList());
         }
 
-        executor.shutdownNow();
+        executor.shutdown();
         repo.setPrgList(prgList);
     }
 

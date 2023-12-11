@@ -44,4 +44,16 @@ public class NewStmt implements IStmt {
     public String toString(){
         return "new(" + var_name + ", " + exp.toString() + ")";
     }
+
+    @Override
+    public MyIDictionary<String, src.domain.type.Type> typeCheck(MyIDictionary<String, src.domain.type.Type> typeEnv) throws MyException {
+        src.domain.type.Type typeVar = typeEnv.lookup(var_name);
+        src.domain.type.Type typeExp = exp.typeCheck(typeEnv);
+        if(typeVar.equals(new RefType(typeExp))){
+            return typeEnv;
+        }
+        else{
+            throw new MyException("New statement: right hand side and left hand side have different types");
+        }
+    }
 }

@@ -28,9 +28,15 @@ public class VarDeclStmt implements IStmt {
         }
         else
         {
-                symTable.add(name, type);
+                symTable.add_default(name, type);
         }
         return null;
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typeCheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        typeEnv.add( name, type);
+        return typeEnv;
     }
 
 }

@@ -42,4 +42,16 @@ public class AssignStmt implements IStmt {
         }
         return null;
     }
+
+    @Override
+    public MyIDictionary<String, Type> typeCheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type typeVar = typeEnv.lookup(id);
+        Type typeExp = exp.typeCheck(typeEnv);
+        if(typeVar.equals(typeExp)){
+            return typeEnv;
+        }
+        else{
+            throw new MyException("Assignment: right hand side and left hand side have different types");
+        }
+    }
 }

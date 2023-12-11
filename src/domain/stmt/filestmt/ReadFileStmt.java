@@ -57,4 +57,16 @@ public class ReadFileStmt implements IStmt {
         }
         return null;
     }
+
+    @Override
+    public MyIDictionary<String, src.domain.type.Type> typeCheck(MyIDictionary<String, src.domain.type.Type> typeEnv) throws MyException {
+        src.domain.type.Type typeExp = exp.typeCheck(typeEnv);
+        src.domain.type.Type typeVar = typeEnv.lookup(var_name);
+        if(typeExp.equals(new StringType()) && typeVar.equals(new IntType())){
+            return typeEnv;
+        }
+        else{
+            throw new MyException("ReadFile statement: expression is not a string or variable is not an integer");
+        }
+    }
 }

@@ -3,6 +3,7 @@ package src.domain.exp;
 import src.domain.exception.MyException;
 import src.domain.prgstate.MyIDictionary;
 import src.domain.type.RefType;
+import src.domain.type.Type;
 import src.domain.value.Value;
 
 public class VarExp implements Exp{
@@ -20,5 +21,10 @@ public class VarExp implements Exp{
     @Override
     public String toString(){
         return id;
+    }
+
+    @Override
+    public Type typeCheck(MyIDictionary<String, Type> typeEnv) throws MyException{
+        return typeEnv.lookup(id);
     }
 }

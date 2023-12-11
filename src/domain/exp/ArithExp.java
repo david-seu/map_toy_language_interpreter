@@ -4,6 +4,7 @@ import src.domain.exception.DivisionByZeroException;
 import src.domain.exception.MyException;
 import src.domain.prgstate.MyIDictionary;
 import src.domain.type.IntType;
+import src.domain.type.Type;
 import src.domain.value.IntValue;
 import src.domain.value.Value;
 public class ArithExp implements Exp{
@@ -54,5 +55,19 @@ public class ArithExp implements Exp{
         if(op==3) s = e1.toString() + "*" + e2.toString();
         if(op==4) s = e1.toString() + "/" + e2.toString();
         return s;
+    }
+
+    @Override
+    public Type typeCheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type typ1, typ2;
+        typ1=e1.typeCheck(typeEnv);
+        typ2=e2.typeCheck(typeEnv);
+        if (typ1.equals(new IntType())) {
+            if (typ2.equals(new IntType())) {
+                return new IntType();
+            } else
+                throw new MyException("second operand is not an integer");
+        }else
+            throw new MyException("first operand is not an integer");
     }
 }

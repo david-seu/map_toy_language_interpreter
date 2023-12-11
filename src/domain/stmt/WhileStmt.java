@@ -2,6 +2,7 @@ package src.domain.stmt;
 
 import src.domain.exception.MyException;
 import src.domain.exp.Exp;
+import src.domain.prgstate.MyIDictionary;
 import src.domain.prgstate.MyIStack;
 import src.domain.prgstate.PrgState;
 import src.domain.type.BoolType;
@@ -34,5 +35,16 @@ public class WhileStmt implements IStmt{
     @Override
     public String toString(){
         return "(while(" + exp.toString() + ") " + stmt.toString() + ")";
+    }
+
+    @Override
+    public MyIDictionary<String, src.domain.type.Type> typeCheck(MyIDictionary<String, src.domain.type.Type> typeEnv) throws MyException {
+        src.domain.type.Type typexp=exp.typeCheck(typeEnv);
+        if (typexp.equals(new BoolType())) {
+            stmt.typeCheck(typeEnv.duplicate());
+            return typeEnv;
+        }
+        else
+            throw new MyException("The condition of WHILE has not the type bool");
     }
 }

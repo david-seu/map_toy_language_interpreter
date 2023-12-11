@@ -2,6 +2,7 @@ package src.domain.stmt;
 
 import src.domain.exception.MyException;
 import src.domain.exp.Exp;
+import src.domain.prgstate.MyIDictionary;
 import src.domain.prgstate.MyIList;
 import src.domain.prgstate.PrgState;
 import src.domain.value.Value;
@@ -27,5 +28,11 @@ public class PrintStmt implements IStmt {
         MyIList<Value> out = state.getOut();
         out.add(exp.eval(state.getSymTable(), state.getHeap()));
         return null;
+    }
+
+    @Override
+    public MyIDictionary<String, src.domain.type.Type> typeCheck(MyIDictionary<String, src.domain.type.Type> typeEnv) throws MyException {
+        exp.typeCheck(typeEnv);
+        return typeEnv;
     }
 }

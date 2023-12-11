@@ -3,6 +3,7 @@ package src.domain.exp;
 import src.domain.exception.MyException;
 import src.domain.prgstate.MyIDictionary;
 import src.domain.type.BoolType;
+import src.domain.type.Type;
 import src.domain.value.BoolValue;
 import src.domain.value.Value;
 
@@ -43,5 +44,19 @@ public class LogicExp implements Exp{
         if(op==1) s = e1.toString() + "&&" + e2.toString();
         if(op==2) s = e1.toString() + "||" + e2.toString();
         return s;
+    }
+
+    @Override
+    public Type typeCheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type type1, type2;
+        type1 = e1.typeCheck(typeEnv);
+        type2 = e2.typeCheck(typeEnv);
+        if(type1.equals(new BoolType())){
+            if(type2.equals(new BoolType())){
+                return new BoolType();
+            }
+            else throw new MyException("second operand is not a boolean");
+        }
+        else throw new MyException("first operand is not a boolean");
     }
 }

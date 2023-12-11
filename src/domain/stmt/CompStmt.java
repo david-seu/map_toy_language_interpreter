@@ -1,8 +1,10 @@
 package src.domain.stmt;
 
 import src.domain.exception.MyException;
+import src.domain.prgstate.MyIDictionary;
 import src.domain.prgstate.MyIStack;
 import src.domain.prgstate.PrgState;
+import src.domain.type.Type;
 
 public class CompStmt implements IStmt {
     private final IStmt first;
@@ -12,7 +14,7 @@ public class CompStmt implements IStmt {
     public CompStmt(){
         second = null;
         first = null;
-    };
+    }
 
     public CompStmt(IStmt first, IStmt second) {
         this.first = first;
@@ -38,6 +40,11 @@ public class CompStmt implements IStmt {
 
     public IStmt getFirst() {
         return first;
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typeCheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        return second.typeCheck(first.typeCheck(typeEnv));
     }
 
 

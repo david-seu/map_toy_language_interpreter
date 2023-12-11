@@ -4,8 +4,6 @@ import src.domain.exception.MyException;
 import src.domain.type.Type;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public interface MyIDictionary<K,V> {
@@ -13,7 +11,7 @@ public interface MyIDictionary<K,V> {
 
     Boolean isDefined(K id);
     void update(K id, V val) throws MyException;
-    void add(K id, Type type) throws MyException;
+    void add_default(K id, Type type) throws MyException;
 
     void add(K id, V val) throws MyException;
 
@@ -24,5 +22,7 @@ public interface MyIDictionary<K,V> {
     void remove(K key);
 
     Map<K, V> getContent();
+
+    MyIDictionary<K, V> duplicate() throws MyException;
 
 }

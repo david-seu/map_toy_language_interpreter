@@ -39,7 +39,7 @@ public class MyDictionary<K,V> implements MyIDictionary<K,V> {
     }
 
     @Override
-    public void add(K id, Type type) throws MyException {
+    public void add_default(K id, Type type) throws MyException {
         if(dict.get(id) == null)
             if(type != null)
             {
@@ -84,5 +84,13 @@ public class MyDictionary<K,V> implements MyIDictionary<K,V> {
         if(dict.isEmpty())
             return "Empty dictionary";
         return dict.toString();
+    }
+
+    public MyIDictionary<K, V> duplicate() throws MyException{
+        MyIDictionary<K, V> clone = new MyDictionary<>();
+        for (K key : dict.keySet()) {
+            clone.add(key, dict.get(key));
+        }
+        return clone;
     }
 }

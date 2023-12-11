@@ -5,6 +5,7 @@ import src.domain.prgstate.MyIDictionary;
 import src.domain.prgstate.PrgState;
 import src.domain.stmt.IStmt;
 import src.domain.type.RefType;
+import src.domain.type.Type;
 import src.domain.value.Value;
 
 public class rHExp implements Exp {
@@ -32,6 +33,19 @@ public class rHExp implements Exp {
     @Override
     public String toString(){
         return "rH(" + exp.toString() + ")";
+    }
+
+
+    @Override
+    public Type typeCheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type type = exp.typeCheck(typeEnv);
+        if(type instanceof RefType){
+            RefType refType = (RefType) type;
+            return refType.getInner();
+        }
+        else{
+            throw new MyException("The rH argument is not a Ref Type");
+        }
     }
 
 

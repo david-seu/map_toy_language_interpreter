@@ -4,6 +4,7 @@ import src.domain.exception.MyException;
 import src.domain.prgstate.*;
 import src.domain.stmt.CompStmt;
 import src.domain.stmt.IStmt;
+import src.domain.type.Type;
 import src.domain.value.RefValue;
 import src.domain.value.StringValue;
 import src.domain.value.Value;
@@ -22,6 +23,13 @@ public class Utils {
     }
 
     public static PrgState createPrgState(IStmt stmt) {
+        MyIDictionary<String, Type> typeEnv = new MyDictionary<>();
+        try {
+            stmt.typeCheck(typeEnv);
+        } catch (MyException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
         MyIStack<IStmt> stk1 = new MyStack<>();
         MyIDictionary<String, Value> symTable1 = new MyDictionary<>();
         MyIDictionary<Integer, Value> heap = new MyHeap();

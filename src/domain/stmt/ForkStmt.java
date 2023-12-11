@@ -29,4 +29,10 @@ public class ForkStmt implements IStmt{
     public String toString(){
         return "fork(" + stmt.toString() + ")";
     }
+
+    @Override
+    public MyIDictionary<String, src.domain.type.Type> typeCheck(MyIDictionary<String, src.domain.type.Type> typeEnv) throws MyException {
+        stmt.typeCheck(typeEnv.duplicate());
+        return typeEnv;
+    }
 }
