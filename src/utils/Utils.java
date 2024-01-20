@@ -22,12 +22,12 @@ public class Utils {
         return stmt.getFirst().toString() + "\n" + stmt.getSecond().toString();
     }
 
-    public static PrgState createPrgState(IStmt stmt) {
+    public static PrgState createPrgState(IStmt stmt, Integer id) {
         MyIDictionary<String, Type> typeEnv = new MyDictionary<>();
         try {
             stmt.typeCheck(typeEnv);
         } catch (MyException e) {
-            System.out.println(e.getMessage());
+            System.out.println(id + ": " +e.getMessage());
             return null;
         }
         MyIStack<IStmt> stk1 = new MyStack<>();
